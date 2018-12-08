@@ -15,26 +15,27 @@
 
     <div id="container-fluid">
         <div class="jumbotron">
-        <h2>Need a laugh? Add a giphy but here are a view to help </h2>
+            <h2>Need a laugh? Add a giphy but here are a view to help </h2>
 
-        <!-- Rendered Buttons will get Dumped Here  -->
-        <div id="buttons-view"></div>
+            <!-- Rendered Buttons will get Dumped Here  -->
+            <div id="buttons-view"></div>
 
-        <form id="office-form">
-            <label for="gif-input">Add Giphy</label>
-            <input type="text" id="gif-input"><br>
+            <form id="office-form">
+                <label for="gif-input">Add Giphy</label>
+                <input type="text" id="gif-input"><br>
 
-            <!-- Button triggers new gifs to be added -->
-            <input id="office-adder" type="submit" value="SEARCH">
-        </form>
+                <!-- Button triggers new gifs to be added -->
+                <input id="office-adder" type="submit" value="SEARCH">
+            </form>
 
-        <!-- Giphy names will Get added Here -->
-        <div id="giphy-adder"></div>
+            <!-- Giphy names will Get added Here -->
+            <div id="giphy-adder"></div>
         </div>
-        </div>
+    </div>
 </head>
 
 <body>
+    <!-- Linking jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
 
@@ -55,7 +56,7 @@
                 // Looping through the array of characters from the office
                 for (var i = 0; i < theOffice.length; i++) {
 
-                    
+
                     // Creates  button tag
                     var button = $("<button>");
                     // Adding a class of giphy-btn to our button
@@ -69,63 +70,69 @@
 
 
                 }
-            }
+            };
+            function giphyAdder() {
+                $("#office-adder").on("click", function (add) {
+                    add.preventDefault();
+                    var giphy = $("#gif-input").val().trim();
 
-            $("#giphy-adder").on("click", function(add){
-                add.preventDefault();
-                var giphy = $("#gif-input").val().trim();
+                    theOffice.push(giphy);
 
-                theOffice.push(giphy);
-
-                renderButtons();
-
-
-            })
-
-            $(document).on("click", "button", function () {
-                office = $(this).attr("data-name");
-
-                var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + office + "&api_key=7JJVlYXGw78utYOiwbRgVVUkydMUMaTA&limit=10";
-                $.ajax({
-                    url: queryURL,
-                    method: "GET"
-                }).then(function (response) {
-
-                    var results = response.data;
-
-                    // Loops through the reults from the data of gifs
-                    for (var i = 0; i < results.length; i++) {
-                        var gifDiv = $("<div>");
-                        // creating a variable to get the rating from each gif from the data 
-                        var rating = results[i].rating;
-                        var p = $("<p>").text("Rating: " + rating);
-
-                        // This  makes the img tag for the giphys and gets the results from the data
-                        var personImage = $("<img>");
-                        personImage.attr("src", results[i].images.fixed_height.url);
-
-                        // This will appened one after another 
-                        gifDiv.append(p);
-                        gifDiv.append(personImage);
-                        $("#giphy-adder").append(gifDiv);
-                        console.log(results);
-                    }
+                    renderButtons();
                 })
-            });
 
-            
-
-
-            function play() {
-                //pauses and plays
             };
 
-           
+            function display() {
+                $(document).on("click", "button", function () {
+                    office = $(this).attr("data-name");
+
+                    var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + office + "&api_key=7JJVlYXGw78utYOiwbRgVVUkydMUMaTA&limit=10";
+                    $.ajax({
+                        url: queryURL,
+                        method: "GET"
+                    }).then(function (response) {
+
+                        var results = response.data;
+
+                        // Loops through the reults from the data of gifs
+                        for (var i = 0; i < results.length; i++) {
+                            var gifDiv = $("<div>");
+                            // creating a variable to get the rating from each gif from the data 
+                            var rating = results[i].rating;
+                            var p = $("<p>").text("Rating: " + rating);
+
+                            // This  makes the img tag for the giphys and gets the results from the data
+                            var personImage = $("<img>");
+                            personImage.attr("src", results[i].images.fixed_height.url);
+
+                            // This will appened one after another 
+                            gifDiv.append(p);
+                            gifDiv.append(personImage);
+                            $("#giphy-adder").append(gifDiv);
+                            console.log(results);
+                        }
+                    })
+                })
+            };
+
+
+            function pause({
+
+
+
+            });
+
+            giphyAdder();
+            renderButtons();
+            display();
+
+
 
         });
 
     </script>
-    
+
 
 </body>
 
